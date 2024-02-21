@@ -122,8 +122,5 @@ sed -i 's/services/vpn/g' feeds/luci/applications/luci-app-v2ray-server/luasrc/c
 sed -i 's/services/vpn/g' feeds/luci/applications/luci-app-v2ray-server/luasrc/model/cbi/v2ray_server/*.lua
 sed -i 's/services/vpn/g' feeds/luci/applications/luci-app-v2ray-server/luasrc/view/v2ray_server/*.htm
 
-# 添加 helloworld 源
-sed -i "s|#src-git helloworld|src-git helloworld|g" feeds.conf.default
-
 ./scripts/feeds update -a
 ./scripts/feeds install -a
