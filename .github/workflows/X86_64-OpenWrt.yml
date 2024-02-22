@@ -49,6 +49,7 @@ jobs:
         sudo -E systemctl daemon-reload
         sudo -E apt-get -y autoremove --purge
         sudo -E apt-get -y clean
+        sudo -E apt-get -y clang
         sudo timedatectl set-timezone "$TZ"
 
     - name: Combine Disks
@@ -99,7 +100,6 @@ jobs:
     - name: Install Feeds
       run: |
         cd $OPENWRT_PATH
-        sudo apt install clang -y
         sed -i "s|#src-git helloworld|src-git helloworld|g" feeds.conf.default
         ./scripts/feeds update -a
         ./scripts/feeds install -a
