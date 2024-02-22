@@ -99,10 +99,10 @@ jobs:
     - name: Install Feeds
       run: |
         cd $OPENWRT_PATH
+        sudo apt install clang -y
         sed -i "s|#src-git helloworld|src-git helloworld|g" feeds.conf.default
         ./scripts/feeds update -a
         ./scripts/feeds install -a
-        cat feeds.conf.default
 
     - name: Load Custom Configuration
       run: |
