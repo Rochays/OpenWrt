@@ -100,6 +100,7 @@ jobs:
       run: |
         cd $OPENWRT_PATH
         sudo apt-get install clang
+        echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
         sed -i "s|#src-git helloworld|src-git helloworld|g" feeds.conf.default
         ./scripts/feeds update -a
         ./scripts/feeds install -a
