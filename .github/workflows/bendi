@@ -1,5 +1,5 @@
 name: X86_64 OpenWrt
-
+runs-on: self-hosted
 on:
   workflow_dispatch:
   schedule:
