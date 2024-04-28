@@ -11,9 +11,9 @@ env:
   CONFIG_FILE: configs/x86_64.config
   DIY_SCRIPT: diy-script.sh
   CLASH_KERNEL: amd64
-  CACHE_TOOLCHAIN: true
-  UPLOAD_BIN_DIR: true
-  FIRMWARE_RELEASE: true
+  CACHE_TOOLCHAIN:  false
+  UPLOAD_BIN_DIR: false
+  FIRMWARE_RELEASE: false
   FIRMWARE_TAG: X86_64
   TZ: Asia/Shanghai
 
@@ -49,16 +49,6 @@ jobs:
         sudo -E apt-get -y autoremove --purge
         sudo -E apt-get -y clean
         sudo timedatectl set-timezone "$TZ"
-
-    - name: Combine Disks
-      uses: easimon/maximize-build-space@master
-      with:
-        swap-size-mb: 1024
-        temp-reserve-mb: 100
-        root-reserve-mb: 1024
-
-    - name: Checkout
-      uses: actions/checkout@main
 
     - name: Clone Source Code
       run: |
