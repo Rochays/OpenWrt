@@ -1,0 +1,41 @@
+REPO_URL=https://github.com/coolsnowwolf/lede
+REPO_BRANCH=master
+CONFIG_FILE=/home/ubantu/Desktop/OpenWrt/configs/x86_64.config
+OPENWRT_PATH=/home/ubantu/Desktop/lede
+GITHUB_WORKSPACE=/home/ubantu/Desktop/OpenWrt
+DIY_SCRIPT=/home/ubantu/Desktop/OpenWrt/diy-script.sh
+CLASH_KERNEL=amd64
+sudo apt install clang
+git clone $REPO_URL -b $REPO_BRANCH
+git clone https://github.com/haiibo/OpenWrt.git
+cp $CONFIG_FILE $OPENWRT_PATH/.config
+cd $OPENWRT_PATH
+make defconfig > /dev/null 2>&1
+sed -i "s|#src-git helloworld|src-git helloworld|g" feeds.conf.default
+echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
+./scripts/feeds update -a
+./scripts/feeds install -a
+[ -e files ] && mv files $OPENWRT_PATH/files
+[ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
+chmod +x $GITHUB_WORKSPACE/scripts/*.sh
+chmod +x $DIY_SCRIPT
+cd $OPENWRT_PATH
+$GITHUB_WORKSPACE/$DIY_SCRIPT
+$GITHUB_WORKSPACE/scripts/preset-clash-core.sh $CLASH_KERNEL
+$GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
+$GITHUB_WORKSPACE/scripts/preset-adguard-core.sh $CLASH_KERNEL
+cd $OPENWRT_PATH
+make defconfig
+make download -j8
+cd $OPENWRT_PATH
+mkdir -p files/etc/uci-defaults
+cp $GITHUB_WORKSPACE/scripts/init-settings.sh files/etc/uci-defaults/99-init-settings
+make -j$(nproc) || make -j1 || make -j1 V=s
+mv -f $OPENWRT_PATH/bin/packages/*/*/*.ipk packages
+tar -zcf Packages.tar.gz packages
+
+make menuconfig
+make defconfig
+
+
+sed -i "s|#src-git helloworld|src-git helloworld|g" feeds.conf.default
